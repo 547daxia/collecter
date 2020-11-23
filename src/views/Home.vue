@@ -1,18 +1,24 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <template v-for="item in nav">
+      {{ item.label }}
+    </template>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  name: '',
+  data () {
+    return {
+      nav: [
+        { href: '', label: '1' },
+        { href: '', label: '2' },
+        { href: '', label: '3' },
+        { href: '', label: '4' }
+      ]
+    }
   }
 }
 </script>
+<style lang="scss" scoped></style>

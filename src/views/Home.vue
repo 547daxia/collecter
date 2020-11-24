@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import test from '@/api/test.js'
+import axios from 'axios'
 export default {
   name: '',
   data () {
@@ -19,8 +19,8 @@ export default {
       ]
     }
   },
-  async created () {
-    const data = await test()
+  async mounted () {
+    const data = await axios.get('https://www.baidu.com')
     console.log(data)
   }
 }

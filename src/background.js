@@ -3,7 +3,11 @@
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+
+import './utils/server'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -13,7 +17,7 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
+    width: 1680,
     height: 600,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone

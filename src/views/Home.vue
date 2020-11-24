@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import test from '@/api/test.js'
 export default {
   name: '',
   data () {
@@ -14,10 +15,13 @@ export default {
       nav: [
         { href: '', label: '1' },
         { href: '', label: '2' },
-        { href: '', label: '3' },
-        { href: '', label: '4' }
+        { href: '', label: '3' }
       ]
     }
+  },
+  async created () {
+    const data = await test()
+    console.log(data)
   }
 }
 </script>

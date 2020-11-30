@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 export default {
   name: '',
   data () {
@@ -20,7 +20,7 @@ export default {
     }
   },
   async mounted () {
-    const data = await axios.get('https://www.baidu.com')
+    const data = this.$axios.get('https://www.baidu.com')
     console.log(data)
   }
 }

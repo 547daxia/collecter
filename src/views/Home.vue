@@ -1,19 +1,12 @@
 <template>
   <div>
-    <div>
-      <!-- 封面 -->
-      <template v-for="item in cover">
-        <img :src="item" alt="" :key="item" />
-      </template>
-      <!-- 简介 -->
-      <template v-for="item in synopsis">
-        <p :key="item">
-          {{ item }}
+    <div class="bookInfo">
+      <template v-for="item in bookArr">
+        <img :src="item.cover" alt="" :key="item.cover" />
+        <a style="display:block;" :href="item.BookHerf" :key="item.BookHerf"> 点击前往</a>
+        <p :key="item.synopsis">
+          {{ item.synopsis }}
         </p>
-      </template>
-      <!-- 简介 -->
-      <template v-for="item in BookHerf">
-        <a :href="item" :key="item"> 点击前往</a>
       </template>
     </div>
     <p></p>
@@ -78,9 +71,20 @@ export default {
       tmpArr.map(i => {
         this.BookHerf.push('https:' + tmpArr[i].attribs.href)
       })
-      console.log(this.cover) // 封面
-      console.log(this.BookHerf) // 书本连接
-      console.log(this.synopsis) // 简介
+    }
+  },
+  computed: {
+    bookArr () {
+      const arr = []
+      this.cover.forEach((item, i) => {
+        const obj = {}
+        obj.cover = item
+        obj.BookHerf = this.BookHerf[i]
+        obj.synopsis = this.synopsis[i]
+
+        arr.push(obj)
+      })
+      return arr
     }
   }
 }

@@ -1,50 +1,87 @@
 <template>
   <div>
-    <template v-for="item in nav">
-      {{ item.label }}
-    </template>
+    <div>
+      <!-- 封面 -->
+      <template v-for="item in cover">
+        <img :src="item" alt="" :key="item" />
+      </template>
+      <!-- 简介 -->
+      <template v-for="item in synopsis">
+        <p :key="item">
+          {{ item }}
+        </p>
+      </template>
+      <!-- 简介 -->
+      <template v-for="item in BookHerf">
+        <a :href="item" :key="item"> 点击前往</a>
+      </template>
+    </div>
+    <p></p>
   </div>
 </template>
 
 <script>
-
 export default {
   name: '',
   data () {
     return {
-      nav: [
-        { href: '', label: '1' },
-        { href: '', label: '2' },
-        { href: '', label: '3' }
-      ],
-      keyWord: '诛仙'
+      keyWord: '诛仙', // 关键字
+      synopsis: [], // 简介,
+      BookHerf: [], // 书籍连接
+      cover: [] // 封面
     }
   },
   async mounted () {
-    const data = await this.$axios.get(
-      `https://www.qidian.com/search?kw=${this.keyWord}`
-    )
-    const $ = this.$cheerio.load(data.data)
-    // const tmpArr = $(
-    //   '#result-list > .book-img-text > ul >li > .book-img-box > a'
-    // )
-    // const imageArr = $(
-    //   '#result-list > .book-img-text > ul >li > .book-img-box > a > img'
-    // )
-    const bookInfo = $(
-      '#result-list > .book-img-text > ul >li > .book-mid-info'
-    )
-    bookInfo[0].children.forEach(item => {
-      if (item.attribs) {
-        if (item.attribs.class) {
-          // console.log(item.attribs.class)
-          item.text()
-        }
-      }
-    })
+    this.getBookInfo('盘龙')
+  },
+  methods: {
+    // 根据关键字获取书本信息 获取了书本的 链接封面
+    async getBookInfo (keyWord) {
+      const data = await this.$axios.get(
+        `https://www.qidian.com/search?kw=${keyWord}`
+      )
+      const $ = this.$cheerio.load(data.data)
+      const tmpArr = $(
+        '#result-list > .book-img-text > ul >li > .book-img-box > a'
+      )
+      const imageArr = $(
+        '#result-list > .book-img-text > ul >li > .book-img-box > a > img'
+      )
+      const bookInfo = $(
+        '#result-list > .book-img-text > ul >li > .book-mid-info'
+      )
 
-    // console.log('https:' + imageArr[0].attribs.src) // 封面
-    // console.log('https:' + tmpArr[0].attribs.href) // 链接
+      bookInfo.each((index, item) => {
+        item.children.forEach(item => {
+          if (item.attribs) {
+            const _this = this
+            switch (item.attribs.class) {
+              case 'intro':
+                if (item.children[0].data) {
+                  _this.synopsis.push(item.children[0].data)
+                }
+                break
+              case 'author':
+                // this.synopsis.push(item.children[0].data)
+                break
+              case 'update':
+                // this.synopsis.push(item.children[0].data)
+                break
+            }
+          }
+        })
+      })
+      imageArr.map(i => {
+        this.cover.push('https:' + imageArr[i].attribs.src)
+      })
+
+      tmpArr.map(i => {
+        this.BookHerf.push('https:' + tmpArr[i].attribs.href)
+      })
+      console.log(this.cover) // 封面
+      console.log(this.BookHerf) // 书本连接
+      console.log(this.synopsis) // 简介
+    }
   }
 }
 </script>
